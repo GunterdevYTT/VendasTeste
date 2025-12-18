@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NyrexMc - VIPs Minecraft</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --blue-dark: #0a1931;
+            --blue-medium: #1a5f7a;
+            --blue-light: #1597bb;
+            --cyan-dark: #00b4d8;
+            --cyan-medium: #48cae4;
+            --cyan-light: #90e0ef;
+            --navy-dark: #0c2461;
+            --navy-medium: #1e3799;
+            --navy-light: #4a69bd;
+            --text-light: #F5F5F5;
+            --text-muted: #CCCCCC;
+            --green-success: #2ecc71;
+            --green-light: #3ae374;
+            --red-error: #ff6b6b;
+            --yellow-warning: #ffd93d;
+            --discord-purple: #7289da;
+            --discord-dark: #36393f;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--blue-dark) 0%, #0a1931 50%, var(--navy-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .water-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                rgba(21, 151, 187, 0.08) 0%, 
+                rgba(26, 95, 122, 0.05) 30%, 
+                rgba(0, 0, 0, 0) 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 3.2rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--cyan-medium), var(--blue-light), var(--cyan-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(72, 202, 228, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .user-bar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(26, 95, 122, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(72, 202, 228, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--cyan-dark), var(--cyan-medium));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #0a1931;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--cyan-light);
+        }
+
+        .logout-btn {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: scale(1.05);
+        }
+
+        .products-section {
+            display: none;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, rgba(26, 95, 122, 0.15), rgba(10, 25, 49, 0.2));
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(72, 202, 228, 0.15);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(72, 202, 228, 0.25);
+            border-color: rgba(72, 202, 228, 0.4);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 2px solid rgba(72, 202, 228, 0.2);
+        }
+
+        .product-info {
+            padding: 18px;
+        }
+
+        .product-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--cyan-light);
+        }
+
+        .product-price {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--cyan-medium);
+            margin-bottom: 18px;
+            text-shadow: 0 0 8px rgba(72, 202, 228, 0.3);
+        }
+
+        .buy-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, var(--blue-medium), var(--cyan-dark));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(26, 95, 122, 0.4);
+        }
+
+        .buy-btn:hover {
+            background: linear-gradient(to right, var(--blue-light), var(--cyan-medium));
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(72, 202, 228, 0.5);
+        }
+
+        .auth-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: linear-gradient(145deg, rgba(26, 95, 122, 0.25), rgba(10, 25, 49, 0.3));
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(72, 202, 228, 0.2);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            color: var(--cyan-light);
+            margin-bottom: 5px;
+        }
+
+        .auth-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .auth-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--green-success), var(--green-light));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .auth-btn:hover {
+            background: linear-gradient(to right, var(--green-light), #3ae374);
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .auth-btn.secondary {
+            background: linear-gradient(to right, var(--blue-medium), var(--cyan-dark));
+            box-shadow: 0 5px 15px rgba(26, 95, 122, 0.3);
+        }
+
+        .auth-btn.secondary:hover {
+            background: linear-gradient(to right, var(--blue-light), var(--cyan-medium));
+            box-shadow: 0 8px 20px rgba(72, 202, 228, 0.4);
+        }
+
+        .auth-divider {
+            color: var(--text-muted);
+            margin: 20px 0;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: rgba(72, 202, 228, 0.2);
+        }
+
+        .auth-divider::before {
+            left: 0;
+        }
+
+        .auth-divider::after {
+            right: 0;
+        }
+
+        .auth-form {
+            display: none;
+            text-align: left;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(26, 95, 122, 0.15);
+            border: 1px solid rgba(72, 202, 228, 0.2);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--cyan-medium);
+            box-shadow: 0 0 10px rgba(72, 202, 228, 0.2);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background: rgba(72, 202, 228, 0.1);
+            color: var(--cyan-light);
+            border: 1px solid rgba(72, 202, 228, 0.3);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 1;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(72, 202, 228, 0.2);
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, var(--green-success), var(--green-light));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 2;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(to right, var(--green-light), #3ae374);
+            transform: scale(1.02);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 25, 49, 0.92);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal {
+            background: linear-gradient(145deg, rgba(26, 95, 122, 0.25), rgba(10, 25, 49, 0.3));
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(72, 202, 228, 0.2);
+            position: relative;
+            animation: modalAppear 0.4s ease;
+            backdrop-filter: blur(10px);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(72, 202, 228, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            color: var(--cyan-light);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            color: var(--cyan-light);
+            background-color: rgba(72, 202, 228, 0.1);
+        }
+
+        .selected-product-info {
+            background-color: rgba(26, 95, 122, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--cyan-medium);
+        }
+
+        .selected-product-title {
+            color: var(--cyan-light);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .selected-product-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .selected-product-price {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--cyan-medium);
+            margin-top: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            margin: 20px 0;
+            padding: 12px;
+            background-color: rgba(26, 95, 122, 0.15);
+            border-radius: 8px;
+            border-left: 4px solid var(--blue-medium);
+        }
+
+        .checkbox-input {
+            margin-right: 10px;
+            margin-top: 3px;
+            transform: scale(1.2);
+            accent-color: var(--cyan-medium);
+        }
+
+        .checkbox-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .payment-section {
+            text-align: center;
+        }
+
+        .payment-title {
+            font-size: 1.6rem;
+            color: var(--cyan-medium);
+            margin-bottom: 10px;
+        }
+
+        .payment-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .pix-info-container {
+            background-color: rgba(26, 95, 122, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 180, 216, 0.2);
+            text-align: center;
+        }
+
+        .pix-email {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--yellow-warning);
+            margin: 15px 0;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(10, 25, 49, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 217, 61, 0.3);
+        }
+
+        .copy-btn {
+            background: linear-gradient(to right, var(--blue-medium), var(--cyan-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(to right, var(--blue-light), var(--cyan-medium));
+            transform: scale(1.05);
+        }
+
+        .qr-code-container {
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .qr-code {
+            max-width: 220px;
+            border-radius: 10px;
+            border: 2px solid rgba(72, 202, 228, 0.2);
+            margin: 0 auto 12px;
+            display: block;
+            background-color: white;
+            padding: 8px;
+        }
+
+        .qr-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .upload-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(72, 202, 228, 0.2);
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(72, 202, 228, 0.4);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(26, 95, 122, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .upload-area:hover {
+            border-color: var(--cyan-medium);
+            background: rgba(26, 95, 122, 0.2);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--green-success);
+            background: rgba(46, 204, 113, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--cyan-medium);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .upload-hint {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-preview {
+            display: none;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(26, 95, 122, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid var(--green-success);
+            text-align: left;
+        }
+
+        .file-preview.active {
+            display: block;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            color: var(--green-success);
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .file-size {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .remove-file {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .remove-file:hover {
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        .upload-status {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+        }
+
+        .upload-status.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--green-success);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            display: block;
+        }
+
+        .upload-status.error {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            display: block;
+        }
+
+        .discord-info {
+            background: rgba(114, 137, 218, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--discord-purple);
+            text-align: left;
+        }
+
+        .discord-icon {
+            color: var(--discord-purple);
+            margin-right: 10px;
+        }
+
+        .continue-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, var(--cyan-dark), var(--cyan-medium));
+            color: #0a1931;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(72, 202, 228, 0.3);
+        }
+
+        .continue-btn:disabled {
+            background: linear-gradient(to right, #2d3748, #4a5568);
+            color: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .continue-btn:not(:disabled):hover {
+            background: linear-gradient(to right, var(--cyan-medium), var(--cyan-light));
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(72, 202, 228, 0.4);
+        }
+
+        .code-section {
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .code-title {
+            font-size: 1.6rem;
+            color: var(--cyan-medium);
+            margin-bottom: 15px;
+        }
+
+        .generated-code {
+            background: linear-gradient(to right, var(--blue-medium), var(--cyan-dark));
+            padding: 18px;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            font-family: monospace;
+            letter-spacing: 1px;
+            margin: 20px 0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--cyan-medium);
+            color: white;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .instructions {
+            background-color: rgba(26, 95, 122, 0.2);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 20px;
+            border-left: 4px solid var(--cyan-medium);
+            text-align: left;
+        }
+
+        .instructions-title {
+            color: var(--cyan-light);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .instructions-text {
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .finish-btn-container {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(72, 202, 228, 0.1);
+        }
+
+        .finish-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, var(--cyan-medium), var(--cyan-light));
+            color: #0a1931;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(72, 202, 228, 0.3);
+        }
+
+        .finish-btn:hover {
+            background: linear-gradient(to right, var(--cyan-light), #caf0f8);
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(72, 202, 228, 0.4);
+        }
+
+        .exit-confirmation {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .exit-modal {
+            background: linear-gradient(145deg, rgba(26, 95, 122, 0.9), rgba(10, 25, 49, 0.9));
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            animation: modalAppear 0.3s ease;
+        }
+
+        .exit-title {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .exit-message {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .exit-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .exit-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            min-width: 120px;
+        }
+
+        .exit-cancel {
+            background: linear-gradient(to right, var(--blue-medium), var(--cyan-dark));
+            color: white;
+        }
+
+        .exit-cancel:hover {
+            background: linear-gradient(to right, var(--blue-light), var(--cyan-medium));
+            transform: scale(1.05);
+        }
+
+        .exit-confirm {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+
+        .exit-confirm:hover {
+            background: linear-gradient(to right, #ff8e8e, #ffaaaa);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .logo {
+                font-size: 2.3rem;
+            }
+            
+            .user-bar {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            
+            .modal {
+                width: 95%;
+                padding: 20px;
+                max-height: 90vh;
+            }
+            
+            .generated-code {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+            
+            .modal-title {
+                font-size: 1.4rem;
+            }
+            
+            .exit-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .exit-btn {
+                width: 100%;
+            }
+            
+            .auth-container {
+                padding: 20px;
+            }
+            
+            .pix-email {
+                font-size: 1.1rem;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .modal {
+                padding: 15px;
+            }
+            
+            .product-name {
+                font-size: 1.3rem;
+            }
+            
+            .product-price {
+                font-size: 1.4rem;
+            }
+            
+            .auth-container {
+                padding: 15px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 25, 49, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--cyan-dark);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--cyan-medium);
+        }
+    </style>
+</head>
+<body>
+    <div class="water-effect"></div>
+    
+    <div class="exit-confirmation" id="exit-confirmation">
+        <div class="exit-modal">
+            <h3 class="exit-title">Atenção!</h3>
+            <p class="exit-message">Tem certeza que deseja sair? Se você sair agora, todo o progresso da compra será perdido.</p>
+            <div class="exit-buttons">
+                <button class="exit-btn exit-cancel" id="exit-cancel">Cancelar</button>
+                <button class="exit-btn exit-confirm" id="exit-confirm">Sair</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="user-bar" id="user-bar" style="display: none;">
+        <div class="user-info">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <span class="user-name" id="user-name">Usuário</span>
+        </div>
+        <button class="logout-btn" id="logout-btn">Sair</button>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1 class="logo">Nyrex SMP</h1>
+            <p class="tagline">Vips exclusivos apenas na Nyrex smp!</p>
+        </header>
+        
+        <section class="auth-screen" id="auth-screen">
+            <div class="auth-container">
+                <h2 class="auth-title">Bem-vindo!</h2>
+                <p class="auth-subtitle">Faça login ou registre-se para continuar</p>
+                
+                <button class="auth-btn" id="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> LOGIN
+                </button>
+                
+                <div class="auth-divider">ou</div>
+                
+                <button class="auth-btn secondary" id="register-btn">
+                    <i class="fas fa-user-plus"></i> REGISTRE-SE!
+                </button>
+                
+                <form class="auth-form" id="login-form">
+                    <div class="form-group">
+                        <label class="form-label" for="login-email">E-mail</label>
+                        <input type="email" id="login-email" class="form-input" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="login-password">Senha</label>
+                        <input type="password" id="login-password" class="form-input" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="back-btn" id="back-from-login">Voltar</button>
+                        <button type="submit" class="submit-btn">Entrar</button>
+                    </div>
+                </form>
+                
+                <form class="auth-form" id="register-form">
+                    <div class="form-group">
+                        <label class="form-label" for="register-name">Nome Completo</label>
+                        <input type="text" id="register-name" class="form-input" placeholder="Seu nome completo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-email">E-mail</label>
+                        <input type="email" id="register-email" class="form-input" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-password">Senha</label>
+                        <input type="password" id="register-password" class="form-input" placeholder="Crie uma senha forte" required minlength="6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-confirm">Confirmar Senha</label>
+                        <input type="password" id="register-confirm" class="form-input" placeholder="Confirme sua senha" required minlength="6">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="back-btn" id="back-from-register">Voltar</button>
+                        <button type="submit" class="submit-btn">Criar Conta</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <section class="products-section" id="products-section">
+            <h2 style="text-align: center; margin-bottom: 25px; color: var(--cyan-light); font-size: 1.8rem;">KITS DISPONÍVEIS</h2>
+            
+            <div class="products-grid" id="products-grid"></div>
+        </section>
+    </div>
+    
+    <div class="overlay" id="overlay">
+        <div class="modal" id="player-data-modal" style="display: none;">
+            <div class="modal-header">
+                <h2 class="modal-title">Dados do Jogador</h2>
+                <button class="close-btn" id="close-player-data">&times;</button>
+            </div>
+            
+            <div class="selected-product-info" id="selected-product-info" style="display: none;">
+                <div class="selected-product-title">Você está comprando:</div>
+                <div class="selected-product-name" id="selected-product-name"></div>
+                <div class="selected-product-price" id="selected-product-price"></div>
+            </div>
+            
+            <form id="player-data-form">
+                <div class="form-group">
+                    <label class="form-label" for="full-name">Nome Completo</label>
+                    <input type="text" id="full-name" class="form-input" value="" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="player-nick">Nick do Jogo (Minecraft)</label>
+                    <input type="text" id="player-nick" class="form-input" placeholder="Digite seu nick no Minecraft" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="discord-nick">Nick do Discord</label>
+                    <input type="text" id="discord-nick" class="form-input" placeholder="Exemplo: usuario#1234" required>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms-checkbox" class="checkbox-input">
+                    <label class="checkbox-label" for="terms-checkbox">
+                        Ao selecionar está seção você fica de acordo que o reembolso é valido apenas abrindo ticket. (Reembolso valido até 3 horas após a compra)
+                    </label>
+                </div>
+                
+                <button type="submit" class="continue-btn" id="continue-to-payment" disabled>CONTINUAR</button>
+            </form>
+        </div>
+        
+        <div class="modal" id="payment-modal" style="display: none;">
+            <div class="modal-header">
+                <h2 class="modal-title">Pagamento via PIX</h2>
+                <button class="close-btn" id="close-payment">&times;</button>
+            </div>
+            
+            <div class="payment-section">
+                <h3 class="payment-title">Faça o Pagamento PIX</h3>
+                <p class="payment-subtitle">Copie a chave PIX ou escaneie o QR Code</p>
+                
+                <div class="pix-info-container">
+                    <p style="color: var(--text-muted); margin-bottom: 10px;">Chave PIX (e-mail):</p>
+                    <div class="pix-email" id="pix-email">cauavini.rodr@gmail.com</div>
+                    <button class="copy-btn" id="copy-pix-email">
+                        <i class="fas fa-copy"></i> COPIAR E-MAIL PIX
+                    </button>
+                </div>
+                
+                <div class="qr-code-container">
+                    <img src="https://i.postimg.cc/PqbV3cwQ/Captura-de-tela-2025-12-17-193931.png" alt="QR Code PIX" class="qr-code">
+                    <p class="qr-label">Escaneie este QR Code com seu app bancário</p>
+                </div>
+                
+                <div class="upload-section">
+                    <h3 style="color: var(--cyan-medium); margin-bottom: 15px;">Envie o Comprovante</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
+                        Após realizar o pagamento, envie o comprovante
+                    </p>
+                    
+                    <div class="discord-info">
+                        <p><i class="fab fa-discord discord-icon"></i> <strong>O comprovante será enviado automaticamente para nosso Discord!</strong></p>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-muted);">
+                            O token gerado também será enviado junto com o comprovante.
+                        </p>
+                    </div>
+                    
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">
+                            <strong>Clique para selecionar ou arraste o comprovante</strong>
+                        </p>
+                        <p class="upload-hint">
+                            Formatos aceitos: JPG, PNG, PDF (máx. 5MB)
+                        </p>
+                        <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.pdf">
+                    </div>
+                    
+                    <div class="file-preview" id="file-preview">
+                        <div class="file-info">
+                            <i class="fas fa-file-image file-icon"></i>
+                            <div class="file-details">
+                                <div class="file-name" id="file-name"></div>
+                                <div class="file-size" id="file-size"></div>
+                            </div>
+                            <button class="remove-file" id="remove-file">
+                                <i class="fas fa-times"></i> Remover
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-status" id="upload-status"></div>
+                    
+                    <button class="continue-btn" id="continue-after-upload" disabled>
+                        <i class="fab fa-discord"></i> ENVIAR PARA DISCORD E GERAR TOKEN
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="final-code-modal" style="display: none;">
+            <div class="modal-header">
+                <h2 class="modal-title">Compra Confirmada!</h2>
+                <button class="close-btn" id="close-final">&times;</button>
+            </div>
+            
+            <div class="code-section">
+                <h3 class="code-title">Seu Código de Confirmação</h3>
+                <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.95rem;">
+                    Comprovante enviado para o Discord! Aqui está seu código:
+                </p>
+                
+                <div class="generated-code" id="generated-code"></div>
+                
+                <div class="instructions">
+                    <h4 class="instructions-title">Próximos Passos:</h4>
+                    <p class="instructions-text">
+                        <i class="fab fa-discord" style="color: var(--discord-purple);"></i> Seu comprovante e token foram enviados para o canal de comprovantes do Discord.
+                    </p>
+                    <p class="instructions-text" style="margin-top: 10px; color: var(--cyan-light);">
+                        <strong>Seu Nick:</strong> <span id="user-nick-display"></span>
+                    </p>
+                    <p class="instructions-text" style="margin-top: 10px; color: var(--green-success);">
+                        <i class="fas fa-check-circle"></i> Embed enviada com sucesso para o Discord!
+                    </p>
+                </div>
+                
+                <div class="finish-btn-container">
+                    <button class="finish-btn" id="finish-button">
+                        <i class="fas fa-check-double"></i> FINALIZAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔧 CONFIGURAÇÃO DO DISCORD - TROQUE O WEBHOOK AQUI!
+        const DISCORD_CONFIG = {
+            webhookUrl: "https://discord.com/api/webhooks/1451109634361528381/lotFlTWsaIndMmfSVVZhmW0EkrVMRYDa9_WAxTIa273KvKl_t402V2slZgJj7jP38M3T", // ← SEU WEBHOOK AQUI
+            channelId: "1451105816890310687"
+        };
+        
+        const products = [
+            { name: "KIT CLAVA", price: "15 R$", image: "https://i.postimg.cc/26vF6Bzm/IMG-7774-1.jpg" },
+            { name: "KIT DUO", price: "29,48 R$", image: "https://i.postimg.cc/gk4ynpP9/image.png" },
+            { name: "KIT SPAWNER", price: "7 R$", image: "https://i.postimg.cc/RFzJgpzk/image.png" },
+            { name: "KIT IMORTAL", price: "14,50 R$", image: "https://i.postimg.cc/nzZM4svk/image.png" },
+            { name: "KIT COMPL.CLAN", price: "10 R$", image: "https://i.postimg.cc/tTxQ4DZH/image.png" },
+            { name: "KIT CLAN", price: "17,50 R$", image: "https://i.postimg.cc/43vpRRPD/image.png" },
+            { name: "KIT OP", price: "13 R$", image: "https://i.postimg.cc/CMRHdXx6/image.png" }
+        ];
+        
+        let currentUser = null;
+        let isLoggedIn = false;
+        let selectedProduct = null;
+        let playerNick = "";
+        let uploadedFile = null;
+        let isExitConfirmationActive = false;
+        
+        const tokenPatterns = ["TOK3N-COMPR4", "COMPR4-TOK3N", "COMPR4-REALIZADA"];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            renderProducts();
+            setupEventListeners();
+            setupFileUpload();
+        });
+        
+        function checkAuthStatus() {
+            const savedUser = localStorage.getItem('nyrexmc_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    isLoggedIn = true;
+                    showStore();
+                    updateUserBar();
+                } catch (e) {
+                    showAuthScreen();
+                }
+            } else {
+                showAuthScreen();
+            }
+        }
+        
+        function showAuthScreen() {
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('products-section').style.display = 'none';
+            document.getElementById('user-bar').style.display = 'none';
+            document.getElementById('login-form').classList.remove('active');
+            document.getElementById('register-form').classList.remove('active');
+        }
+        
+        function showStore() {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('products-section').style.display = 'block';
+            document.getElementById('user-bar').style.display = 'flex';
+        }
+        
+        function updateUserBar() {
+            if (currentUser) {
+                const firstName = currentUser.name.split(' ')[0];
+                const firstLetter = firstName.charAt(0).toUpperCase();
+                document.getElementById('user-name').textContent = firstName;
+                document.getElementById('user-avatar').textContent = firstLetter;
+                document.getElementById('full-name').value = currentUser.name;
+            }
+        }
+        
+        function renderProducts() {
+            const productsGrid = document.getElementById('products-grid');
+            productsGrid.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price">${product.price}</div>
+                        <button class="buy-btn" data-product='${JSON.stringify(product)}'>COMPRAR</button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+        
+        function setupFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const uploadArea = document.getElementById('upload-area');
+            const removeFileBtn = document.getElementById('remove-file');
+            const continueAfterUploadBtn = document.getElementById('continue-after-upload');
+            
+            uploadArea.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileSelect();
+                }
+            });
+            
+            removeFileBtn.addEventListener('click', removeFile);
+            continueAfterUploadBtn.addEventListener('click', sendToDiscordAndGenerateToken);
+        }
+        
+        function handleFileSelect() {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showUploadStatus('Arquivo muito grande. Máximo 5MB.', 'error');
+                fileInput.value = '';
+                return;
+            }
+            
+            const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+            if (!validTypes.includes(file.type)) {
+                showUploadStatus('Tipo de arquivo inválido. Use JPG, PNG ou PDF.', 'error');
+                fileInput.value = '';
+                return;
+            }
+            
+            uploadedFile = file;
+            document.getElementById('file-name').textContent = file.name;
+            document.getElementById('file-size').textContent = formatFileSize(file.size);
+            document.getElementById('file-preview').classList.add('active');
+            document.getElementById('continue-after-upload').disabled = false;
+            showUploadStatus('Arquivo selecionado. Clique para enviar ao Discord.', 'success');
+        }
+        
+        function removeFile() {
+            document.getElementById('file-input').value = '';
+            uploadedFile = null;
+            document.getElementById('file-preview').classList.remove('active');
+            document.getElementById('continue-after-upload').disabled = true;
+            document.getElementById('upload-status').classList.remove('success', 'error');
+        }
+        
+        // 🚀 FUNÇÃO PRINCIPAL: ENVIAR PARA DISCORD
+        async function sendToDiscordAndGenerateToken() {
+            if (!uploadedFile) {
+                showUploadStatus('Selecione um arquivo primeiro.', 'error');
+                return;
+            }
+            
+            showUploadStatus('Enviando comprovante para o Discord...', 'success');
+            
+            const gameNick = document.getElementById('player-nick').value.trim();
+            const discordNick = document.getElementById('discord-nick').value.trim();
+            const userName = document.getElementById('full-name').value;
+            
+            // Gerar token
+            const token = generatePersonalizedToken();
+            
+            try {
+                // Converter arquivo para base64
+                const base64File = await fileToBase64(uploadedFile);
+                
+                // Criar embed do Discord
+                const embed = {
+                    title: "💰 NOVO COMPROVANTE PIX RECEBIDO",
+                    description: `**Compra realizada com sucesso!**`,
+                    color: 0x00ff00,
+                    fields: [
+                        {
+                            name: "👤 Cliente",
+                            value: `**Nome:** ${userName}\n**Nick Minecraft:** ${gameNick}\n**Nick Discord:** ${discordNick}`,
+                            inline: false
+                        },
+                        {
+                            name: "🛒 Produto",
+                            value: `**${selectedProduct.name}** - ${selectedProduct.price}`,
+                            inline: true
+                        },
+                        {
+                            name: "🔑 Token Gerado",
+                            value: `\`\`\`${token}\`\`\``,
+                            inline: true
+                        },
+                        {
+                            name: "📅 Data/Hora",
+                            value: new Date().toLocaleString('pt-BR'),
+                            inline: true
+                        },
+                        {
+                            name: "📋 Status",
+                            value: "✅ **PENDENTE DE APROVAÇÃO**",
+                            inline: false
+                        }
+                    ],
+                    footer: {
+                        text: "NyrexMC • Sistema Automático de Comprovantes",
+                        icon_url: "https://cdn.discordapp.com/attachments/1342495483591000075/1342495483926548592/minecraft-logo.png"
+                    },
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Enviar para Discord via webhook
+                const discordResponse = await sendToDiscordWebhook(embed, uploadedFile, base64File);
+                
+                if (discordResponse.success) {
+                    showUploadStatus('✅ Comprovante enviado para o Discord! Gerando seu token...', 'success');
+                    
+                    // Mostrar token após 2 segundos
+                    setTimeout(() => {
+                        document.getElementById('generated-code').textContent = token;
+                        document.getElementById('user-nick-display').textContent = gameNick;
+                        document.getElementById('payment-modal').style.display = 'none';
+                        document.getElementById('final-code-modal').style.display = 'block';
+                        document.getElementById('overlay').scrollTop = 0;
+                        
+                        // Copiar token automaticamente
+                        navigator.clipboard.writeText(token).then(() => {
+                            console.log('Token copiado automaticamente');
+                        });
+                    }, 2000);
+                    
+                } else {
+                    showUploadStatus('❌ Erro ao enviar para o Discord. Tente novamente.', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                showUploadStatus('❌ Erro no processo. Tente novamente.', 'error');
+            }
+        }
+        
+        // 🔄 Converter arquivo para base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+        
+        // 📤 Enviar para Discord via Webhook
+        async function sendToDiscordWebhook(embed, file, base64File) {
+            try {
+                // Primeiro enviar a embed
+                const embedResponse = await fetch(DISCORD_CONFIG.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+                
+                if (!embedResponse.ok) {
+                    throw new Error('Falha ao enviar embed');
+                }
+                
+                // Depois enviar o arquivo (se necessário)
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file, file.name);
+                    formData.append('content', '📎 **Arquivo do comprovante anexado:**');
+                    
+                    const fileResponse = await fetch(DISCORD_CONFIG.webhookUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!fileResponse.ok) {
+                        throw new Error('Falha ao enviar arquivo');
+                    }
+                }
+                
+                return { success: true };
+                
+            } catch (error) {
+                console.error('Erro ao enviar para Discord:', error);
+                return { success: false, error: error.message };
+            }
+        }
+        
+        function generatePersonalizedToken() {
+            const randomIndex = Math.floor(Math.random() * tokenPatterns.length);
+            const tokenPattern = tokenPatterns[randomIndex];
+            const cleanNick = playerNick.replace(/[^a-zA-Z0-9_]/g, '').toUpperCase();
+            const finalNick = cleanNick || "JOGADOR";
+            return `${finalNick}.${tokenPattern}`;
+        }
+        
+        function showUploadStatus(message, type) {
+            const statusElement = document.getElementById('upload-status');
+            statusElement.textContent = message;
+            statusElement.className = 'upload-status ' + type;
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function setupEventListeners() {
+            document.getElementById('login-btn').addEventListener('click', () => {
+                document.getElementById('login-form').classList.add('active');
+                document.getElementById('register-form').classList.remove('active');
+            });
+            
+            document.getElementById('register-btn').addEventListener('click', () => {
+                document.getElementById('register-form').classList.add('active');
+                document.getElementById('login-form').classList.remove('active');
+            });
+            
+            document.getElementById('back-from-login').addEventListener('click', () => {
+                document.getElementById('login-form').classList.remove('active');
+                document.getElementById('login-form').reset();
+            });
+            
+            document.getElementById('back-from-register').addEventListener('click', () => {
+                document.getElementById('register-form').classList.remove('active');
+                document.getElementById('register-form').reset();
+            });
+            
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value.trim();
+                const password = document.getElementById('login-password').value.trim();
+                if (!email || !password) {
+                    alert('Por favor, preencha todos os campos.');
+                    return;
+                }
+                simulateLogin(email, password);
+            });
+            
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value.trim();
+                const email = document.getElementById('register-email').value.trim();
+                const password = document.getElementById('register-password').value.trim();
+                const confirmPassword = document.getElementById('register-confirm').value.trim();
+                
+                if (!name || !email || !password || !confirmPassword) {
+                    alert('Por favor, preencha todos os campos.');
+                    return;
+                }
+                if (password.length < 6) {
+                    alert('A senha deve ter pelo menos 6 caracteres.');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    alert('As senhas não coincidem.');
+                    return;
+                }
+                if (!isValidEmail(email)) {
+                    alert('Por favor, insira um e-mail válido.');
+                    return;
+                }
+                simulateRegister(name, email, password);
+            });
+            
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja sair?')) logout();
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('buy-btn')) {
+                    if (!isLoggedIn) {
+                        alert('Você precisa fazer login para comprar.');
+                        showAuthScreen();
+                        return;
+                    }
+                    const productData = JSON.parse(e.target.getAttribute('data-product'));
+                    openPlayerDataModal(productData);
+                }
+            });
+            
+            const termsCheckbox = document.getElementById('terms-checkbox');
+            const continueToPaymentBtn = document.getElementById('continue-to-payment');
+            termsCheckbox.addEventListener('change', () => {
+                continueToPaymentBtn.disabled = !termsCheckbox.checked;
+            });
+            
+            document.getElementById('player-data-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const gameNick = document.getElementById('player-nick').value.trim();
+                const discordNick = document.getElementById('discord-nick').value.trim();
+                
+                if (!gameNick || !discordNick) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+                if (!termsCheckbox.checked) {
+                    alert('Você precisa aceitar os termos para continuar.');
+                    return;
+                }
+                playerNick = gameNick.replace(/\s+/g, '_').toUpperCase();
+                openPaymentModal();
+            });
+            
+            document.getElementById('copy-pix-email').addEventListener('click', function() {
+                const pixEmail = document.getElementById('pix-email').textContent;
+                navigator.clipboard.writeText(pixEmail).then(() => {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i> E-MAIL COPIADO!';
+                    this.style.background = 'linear-gradient(to right, var(--green-success), var(--green-light))';
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.background = 'linear-gradient(to right, var(--blue-medium), var(--cyan-dark))';
+                    }, 2000);
+                }).catch(err => {
+                    alert('Não foi possível copiar o e-mail. Copie manualmente: cauavini.rodr@gmail.com');
+                });
+            });
+            
+            document.getElementById('close-player-data').addEventListener('click', showExitConfirmation);
+            document.getElementById('close-payment').addEventListener('click', showExitConfirmation);
+            document.getElementById('close-final').addEventListener('click', showExitConfirmation);
+            
+            document.getElementById('exit-cancel').addEventListener('click', hideExitConfirmation);
+            document.getElementById('exit-confirm').addEventListener('click', () => {
+                closeAllModals();
+                hideExitConfirmation();
+            });
+            
+            document.getElementById('finish-button').addEventListener('click', () => {
+                closeAllModals();
+                hideExitConfirmation();
+                alert('Obrigado por sua compra! O comprovante foi registrado no Discord.');
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.getElementById('overlay').style.display === 'flex') {
+                    showExitConfirmation();
+                }
+            });
+        }
+        
+        function simulateLogin(email, password) {
+            const savedUser = localStorage.getItem('nyrexmc_user');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                if (user.email === email) {
+                    currentUser = user;
+                    isLoggedIn = true;
+                    localStorage.setItem('nyrexmc_logged_in', 'true');
+                    showStore();
+                    updateUserBar();
+                    document.getElementById('login-form').reset();
+                    document.getElementById('login-form').classList.remove('active');
+                    alert('Login realizado com sucesso!');
+                    return;
+                }
+            }
+            alert('E-mail ou senha incorretos. Tente novamente ou registre-se.');
+        }
+        
+        function simulateRegister(name, email, password) {
+            const savedUser = localStorage.getItem('nyrexmc_user');
+            if (savedUser) {
+                const existingUser = JSON.parse(savedUser);
+                if (existingUser.email === email) {
+                    alert('Este e-mail já está em uso. Tente fazer login.');
+                    return;
+                }
+            }
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem('nyrexmc_user', JSON.stringify(newUser));
+            localStorage.setItem('nyrexmc_logged_in', 'true');
+            currentUser = newUser;
+            isLoggedIn = true;
+            showStore();
+            updateUserBar();
+            document.getElementById('register-form').reset();
+            document.getElementById('register-form').classList.remove('active');
+            alert('Conta criada com sucesso! Bem-vindo(a) ao NyrexMc!');
+        }
+        
+        function logout() {
+            currentUser = null;
+            isLoggedIn = false;
+            localStorage.removeItem('nyrexmc_logged_in');
+            showAuthScreen();
+            closeAllModals();
+            hideExitConfirmation();
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        function openPlayerDataModal(product) {
+            selectedProduct = product;
+            playerNick = "";
+            uploadedFile = null;
+            document.getElementById('selected-product-info').style.display = 'block';
+            document.getElementById('selected-product-name').textContent = product.name;
+            document.getElementById('selected-product-price').textContent = product.price;
+            document.getElementById('player-nick').value = '';
+            document.getElementById('discord-nick').value = '';
+            document.getElementById('terms-checkbox').checked = false;
+            document.getElementById('continue-to-payment').disabled = true;
+            if (currentUser) {
+                document.getElementById('full-name').value = currentUser.name;
+            }
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('player-data-modal').style.display = 'block';
+            document.getElementById('payment-modal').style.display = 'none';
+            document.getElementById('final-code-modal').style.display = 'none';
+            hideExitConfirmation();
+            document.getElementById('overlay').scrollTop = 0;
+            setTimeout(() => {
+                document.getElementById('player-nick').focus();
+            }, 300);
+        }
+        
+        function openPaymentModal() {
+            removeFile();
+            document.getElementById('player-data-modal').style.display = 'none';
+            document.getElementById('payment-modal').style.display = 'block';
+            hideExitConfirmation();
+            document.getElementById('overlay').scrollTop = 0;
+        }
+        
+        function showExitConfirmation() {
+            if (isExitConfirmationActive) return;
+            isExitConfirmationActive = true;
+            document.getElementById('exit-confirmation').style.display = 'flex';
+            document.getElementById('exit-confirmation').style.animation = 'modalAppear 0.3s ease';
+        }
+        
+        function hideExitConfirmation() {
+            isExitConfirmationActive = false;
+            document.getElementById('exit-confirmation').style.display = 'none';
+        }
+        
+        function closeAllModals() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('player-data-modal').style.display = 'none';
+            document.getElementById('payment-modal').style.display = 'none';
+            document.getElementById('final-code-modal').style.display = 'none';
+            document.getElementById('selected-product-info').style.display = 'none';
+            isExitConfirmationActive = false;
+        }
+    </script>
+</body>
+</html>
+
+
